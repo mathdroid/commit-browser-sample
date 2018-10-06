@@ -45,7 +45,7 @@ const AppStyles = styled.div`
 
 class App extends React.Component {
   componentDidMount() {
-    console.log("cdm");
+    // console.log("cdm");
   }
   render() {
     return (

@@ -55,7 +55,12 @@ class CallbackPage extends React.Component {
       }
     );
     const text = await response.text();
+    console({ text });
     const { token = "", error = null } = decode(text);
+    console.log({
+      token,
+      error
+    });
     if (token) {
       userStorage.setItem("token", token);
     }
