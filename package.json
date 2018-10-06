@@ -26,6 +26,7 @@
   "devDependencies": {
     "babel-plugin-emotion": "^9.2.4",
     "emotion-server": "^9.2.4",
+    "eslint": "^5.6.1",
     "eslint-config-react-tools": "1.x.x"
   }
 }

@@ -14,7 +14,6 @@ export default withSiteData(({ githubClientId }) => (
 
         <a
           href={`https://github.com/login/oauth/authorize?client_id=${githubClientId}`}
-          target="_blank"
         >
           <Button>Connect to Github</Button>
         </a>

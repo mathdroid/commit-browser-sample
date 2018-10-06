@@ -56,7 +56,7 @@ class CallbackPage extends React.Component {
     );
     const text = await response.text();
     console.log({ text });
-    const { token = "", error = null } = decode(text);
+    const { access_token: token = "", error = null } = decode(text);
     console.log({
       token,
       error
