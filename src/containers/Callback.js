@@ -4,7 +4,7 @@ import fetch from "isomorphic-unfetch";
 
 import Button from "../components/button";
 
-function getQueryVariable(searchString, variable) {
+const getQueryVariable = (searchString, variable) => {
   const query = searchString.substring(1);
   const vars = query.split("&");
   for (let i = 0; i < vars.length; i++) {
@@ -14,9 +14,18 @@ function getQueryVariable(searchString, variable) {
     }
   }
   console.log("Query variable %s not found", variable);
-}
+};
+
+const encode = data => {
+  return Object.keys(data)
+    .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
+    .join("&");
+};
 
 class CallbackPage extends React.Component {
+  state = {
+    token: ""
+  };
   async componentDidMount() {
     const {
       githubClientId: client_id,
@@ -24,32 +33,30 @@ class CallbackPage extends React.Component {
       location: { search }
     } = this.props;
     const code = getQueryVariable(search, "code");
+    const query = encode({
+      client_id,
+      client_secret,
+      code
+    });
     const response = await fetch(
-      "https://github.com/login/oauth/access_token",
+      `https://github-oauth-proxy.now.sh/?${query}`,
       {
-        method: "POST",
-        body: JSON.stringify({
-          client_id,
-          client_secret,
-          code
-        })
+        method: "POST"
       }
     );
     console.log({ response });
+    const token = await response.text();
+    console.log({ token });
+    this.setState({ token });
   }
   render() {
     const { githubClientId, location } = this.props;
+    const { token } = this.state;
     const code = getQueryVariable(location.search, "code");
     return (
       <div>
         <h1 style={{ textAlign: "center" }}>{code}</h1>
-
-        <a
-          href={`https://github.com/login/oauth/authorize?client_id=${githubClientId}`}
-          target="_blank"
-        >
-          <Button>Connect to Github</Button>
-        </a>
+        <h2>Token: {token}</h2>
       </div>
     );
   }
