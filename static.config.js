@@ -21,15 +21,15 @@ export default {
     return [
       {
         path: "/",
-        component: "src/containers/Home"
+        component: "src/pages/Home"
       },
       {
         path: "/callback",
-        component: "src/containers/Callback"
+        component: "src/pages/Callback"
       },
       {
         is404: true,
-        component: "src/containers/404"
+        component: "src/pages/404"
       }
     ];
   },
