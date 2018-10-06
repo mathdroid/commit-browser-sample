@@ -24,6 +24,10 @@ export default {
         component: "src/pages/Home"
       },
       {
+        path: "/login",
+        component: "src/pages/Login"
+      },
+      {
         path: "/callback",
         component: "src/pages/Callback"
       },

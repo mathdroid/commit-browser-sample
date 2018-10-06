@@ -2,8 +2,8 @@ import React from "react";
 import { Router, Link } from "react-static";
 import styled, { injectGlobal } from "react-emotion";
 import { hot } from "react-hot-loader";
-//
 import Routes from "react-static-routes";
+import { Provider } from "unstated";
 
 injectGlobal`
   body {
@@ -49,18 +49,20 @@ class App extends React.Component {
   }
   render() {
     return (
-      <Router>
-        <AppStyles>
-          <nav>
-            <Link exact to="/">
-              Home
-            </Link>
-          </nav>
-          <div className="content">
-            <Routes />
-          </div>
-        </AppStyles>
-      </Router>
+      <Provider>
+        <Router>
+          <AppStyles>
+            <nav>
+              <Link exact to="/">
+                Home
+              </Link>
+            </nav>
+            <div className="content">
+              <Routes />
+            </div>
+          </AppStyles>
+        </Router>
+      </Provider>
     );
   }
 }
