@@ -2,8 +2,6 @@ import React from "react";
 import { withSiteData } from "react-static";
 import fetch from "isomorphic-unfetch";
 
-import Button from "../components/button";
-
 const getQueryVariable = (searchString, variable) => {
   const query = searchString.substring(1);
   const vars = query.split("&");
@@ -16,6 +14,16 @@ const getQueryVariable = (searchString, variable) => {
   console.log("Query variable %s not found", variable);
 };
 
+const decode = data => {
+  const vars = data.split("&");
+  let obj = {};
+  for (let v of vars) {
+    const [key, value] = v.split("=");
+    obj = { ...obj, [key]: value };
+  }
+  return obj;
+};
+
 const encode = data => {
   return Object.keys(data)
     .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
@@ -24,7 +32,8 @@ const encode = data => {
 
 class CallbackPage extends React.Component {
   state = {
-    token: ""
+    token: "",
+    error: null
   };
   async componentDidMount() {
     const {
@@ -44,19 +53,17 @@ class CallbackPage extends React.Component {
         method: "POST"
       }
     );
-    console.log({ response });
-    const token = await response.text();
-    console.log({ token });
-    this.setState({ token });
+    const text = await response.text();
+    const { token = "", error = null } = decode(text);
+    this.setState({ token, error });
   }
   render() {
-    const { githubClientId, location } = this.props;
-    const { token } = this.state;
-    const code = getQueryVariable(location.search, "code");
+    const { token, error } = this.state;
     return (
       <div>
-        <h1 style={{ textAlign: "center" }}>{code}</h1>
-        <h2>Token: {token}</h2>
+        <h1 style={{ textAlign: "center" }}>Verifying...</h1>
+        <h2>{token ? `Token: ${token}` : null}</h2>
+        <h2>{error ? `Error: ${error}` : null}</h2>
       </div>
     );
   }
