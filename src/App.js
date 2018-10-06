@@ -43,19 +43,26 @@ const AppStyles = styled.div`
   }
 `;
 
-const App = () => (
-  <Router>
-    <AppStyles>
-      <nav>
-        <Link exact to="/">
-          Home
-        </Link>
-      </nav>
-      <div className="content">
-        <Routes />
-      </div>
-    </AppStyles>
-  </Router>
-);
+class App extends React.Component {
+  componentDidMount() {
+    console.log("cdm");
+  }
+  render() {
+    return (
+      <Router>
+        <AppStyles>
+          <nav>
+            <Link exact to="/">
+              Home
+            </Link>
+          </nav>
+          <div className="content">
+            <Routes />
+          </div>
+        </AppStyles>
+      </Router>
+    );
+  }
+}
 
 export default hot(module)(App);

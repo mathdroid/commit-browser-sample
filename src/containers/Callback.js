@@ -1,6 +1,7 @@
 import React from "react";
-import { withSiteData } from "react-static";
+import { withSiteData, Redirect } from "react-static";
 import fetch from "isomorphic-unfetch";
+import { userStorage } from "../storage";
 
 const getQueryVariable = (searchString, variable) => {
   const query = searchString.substring(1);
@@ -55,6 +56,9 @@ class CallbackPage extends React.Component {
     );
     const text = await response.text();
     const { token = "", error = null } = decode(text);
+    if (token) {
+      userStorage.setItem("token", token);
+    }
     this.setState({ token, error });
   }
   render() {
@@ -62,8 +66,8 @@ class CallbackPage extends React.Component {
     return (
       <div>
         <h1 style={{ textAlign: "center" }}>Verifying...</h1>
-        <h2>{token ? `Token: ${token}` : null}</h2>
-        <h2>{error ? `Error: ${error}` : null}</h2>
+        <h2>{token ? <Redirect to="/" /> : null}</h2>
+        <h2>{error ? <Redirect to="/" /> : null}</h2>
       </div>
     );
   }
