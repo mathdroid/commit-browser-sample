@@ -10,13 +10,16 @@
     "serve": "serve dist -p 3000"
   },
   "dependencies": {
+    "dotenv": "^6.0.0",
     "emotion": "^9.2.4",
+    "isomorphic-unfetch": "^3.0.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-emotion": "^9.2.4",
     "react-router": "^4.2.0",
     "react-static": "^5.9.12",
-    "react-universal-component": "^3.0.3"
+    "react-universal-component": "^3.0.3",
+    "unfetch": "^4.0.1"
   },
   "devDependencies": {
     "babel-plugin-emotion": "^9.2.4",
