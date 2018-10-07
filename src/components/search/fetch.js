@@ -1,5 +1,5 @@
 import React from "react";
-import fetch from "unfetch";
+import fetch from "isomorphic-unfetch";
 import debounce from "debounce-fn";
 import isEqual from "react-fast-compare";
 
@@ -35,9 +35,9 @@ class Fetch extends React.Component {
       headers
     })
       .then(r => r.json())
-      .then(res => {
+      .then(data => {
         this.setState({
-          data: res.data,
+          data,
           loading: false,
           error: false
         });
@@ -46,7 +46,7 @@ class Fetch extends React.Component {
         this.setState({ data: undefined, error: e.message, loading: false });
         console.error(e);
       });
-  }, 200);
+  }, 300);
 
   fetchData = () => {
     this.setState({ error: false, loading: true });

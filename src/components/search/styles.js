@@ -43,7 +43,7 @@ const Item = styled("li")(
 const onAttention = "&:hover, &:focus";
 const Input = styled("input")(
   {
-    width: "100%", // full width - icon width/2 - border
+    width: "calc(100% - 3em)", // full width - icon width/2 - border
     fontSize: 14,
     wordWrap: "break-word",
     lineHeight: "1em",

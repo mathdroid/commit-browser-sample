@@ -16,6 +16,7 @@ const baseEndpoint = "https://api.github.com/search/repositories";
 
 class Search extends React.Component {
   render() {
+    const { Authorization } = this.props;
     return (
       <div
         {...css({
@@ -46,7 +47,7 @@ class Search extends React.Component {
                   <Input
                     {...getInputProps({
                       isOpen,
-                      placeholder: "Search repository"
+                      placeholder: "facebook/react"
                     })}
                   />
                   {selectedItem ? (
@@ -75,7 +76,11 @@ class Search extends React.Component {
                     }
 
                     return (
-                      <Fetch url={baseEndpoint} params={{ q: inputValue }}>
+                      <Fetch
+                        url={baseEndpoint}
+                        params={{ q: inputValue }}
+                        headers={{ Authorization }}
+                      >
                         {({ loading, error, data: { items = [] } = {} }) => {
                           if (loading) {
                             return <Item disabled>Loading...</Item>;
@@ -89,7 +94,7 @@ class Search extends React.Component {
                             return <Item disabled>No repositories found</Item>;
                           }
 
-                          return items.map(({ id, name: item }, index) => (
+                          return items.map(({ id, full_name: item }, index) => (
                             <Item
                               key={id}
                               {...getItemProps({

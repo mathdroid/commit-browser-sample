@@ -9,9 +9,9 @@ export default withSiteData(() => (
     render={({ token }) => (
       <React.Fragment>
         <h1 style={{ textAlign: "center" }}>
-          Welcome to Github Commit Browser, {JSON.stringify(token)}
+          Welcome to Github Commit Browser.
         </h1>
-        <Search />
+        <Search Authorization={`token ${token}`} />
       </React.Fragment>
     )}
   />
