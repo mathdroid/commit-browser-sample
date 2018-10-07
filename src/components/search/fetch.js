@@ -15,11 +15,14 @@ class Fetch extends React.Component {
     loading: false,
     error: false
   };
-
+  mounted = false;
   componentDidMount() {
+    this.mounted = true;
     this.fetchData();
   }
-
+  componentWillUnmount() {
+    this.mounted = false;
+  }
   componentDidUpdate({ children: _, ...prevProps }) {
     const { children, ...props } = this.props;
     if (!isEqual(prevProps, props)) {
@@ -36,14 +39,18 @@ class Fetch extends React.Component {
     })
       .then(r => r.json())
       .then(data => {
-        this.setState({
-          data,
-          loading: false,
-          error: false
-        });
+        if (this.mounted) {
+          this.setState({
+            data,
+            loading: false,
+            error: false
+          });
+        }
       })
       .catch(e => {
-        this.setState({ data: undefined, error: e.message, loading: false });
+        if (this.mounted) {
+          this.setState({ data: undefined, error: e.message, loading: false });
+        }
         console.error(e);
       });
   };
