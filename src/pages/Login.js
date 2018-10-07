@@ -1,23 +1,27 @@
 import React, { Fragment } from "react";
 import { withSiteData } from "react-static";
 
+import { userStorage } from "../storage";
 import WithUser from "../containers/user";
 import Button from "../components/button";
 
-export default withSiteData(({ githubClientId }) => (
-  <WithUser
-    redirectIfLoggedIn
-    redirectTo="/"
-    render={() => (
-      <Fragment>
-        <h1 style={{ textAlign: "center" }}>Please Login</h1>
+// class WithTokenFromStorage extends React.Component {
+//   state = {
+//     tokenFromStorage: ''
+//   }
+//   async componentDidMount() {
+//     const tokenFromStorage = await userStorage.getItem)
+//   }
+// }
 
-        <a
-          href={`https://github.com/login/oauth/authorize?client_id=${githubClientId}`}
-        >
-          <Button>Connect to Github</Button>
-        </a>
-      </Fragment>
-    )}
-  />
+export default withSiteData(({ githubClientId }) => (
+  <Fragment>
+    <h1 style={{ textAlign: "center" }}>Please Login</h1>
+
+    <a
+      href={`https://github.com/login/oauth/authorize?client_id=${githubClientId}`}
+    >
+      <Button>Connect to Github</Button>
+    </a>
+  </Fragment>
 ));

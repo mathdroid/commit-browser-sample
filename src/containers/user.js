@@ -3,10 +3,11 @@ import { Redirect } from "react-static";
 
 import { userStorage } from "../storage";
 
-function logStorageChange(changes, area) {
-  console.log("Change in storage area: ", { area });
-  console.log("Changes: ", { changes });
-}
+var onStorage = function(data) {
+  console.log({ data });
+  // Receive changes in the localStorage
+};
+
 class WithUser extends React.Component {
   state = {
     token: "",
@@ -17,9 +18,11 @@ class WithUser extends React.Component {
   async componentDidMount() {
     await this.getTokenFromLocal();
 
-    // if (localStorage.onChanged.hasListener(logStorageChange)) {
-    //   localStorage.onChanged.addListener(logStorageChange);
-    // }
+    if (window.addEventListener) {
+      window.addEventListener("storage", onStorage, false);
+    } else {
+      window.attachEvent("onstorage", onStorage);
+    }
   }
 
   async getTokenFromLocal() {
@@ -39,6 +42,7 @@ class WithUser extends React.Component {
   render() {
     const {
       render,
+      noRedirect = false,
       redirectIfLoggedIn = false,
       redirectTo = "/login",
       ...rest
@@ -47,7 +51,9 @@ class WithUser extends React.Component {
     const shouldRedirect = redirectIfLoggedIn ? !!token : !!error;
     return loaded ? (
       shouldRedirect ? (
-        <Redirect to={redirectTo} />
+        noRedirect ? (
+          <Redirect to={redirectTo} />
+        ) : null
       ) : (
         render({ token, ...rest })
       )

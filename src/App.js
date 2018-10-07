@@ -3,7 +3,11 @@ import { Router, Link } from "react-static";
 import styled, { injectGlobal } from "react-emotion";
 import { hot } from "react-hot-loader";
 import Routes from "react-static-routes";
-import { Provider } from "unstated";
+import { Provider, Subscribe } from "unstated";
+
+import Auth from "./containers/auth";
+
+let authContainer = new Auth();
 
 injectGlobal`
   html, body {
@@ -58,20 +62,26 @@ const AppStyles = styled.div`
   }
 `;
 
+const Header = ({ token = "", logout = () => null }) => (
+  <nav>
+    <Link exact to="/">
+      Github Commit Browser
+    </Link>
+    {token ? <button onClick={logout}>Log Out</button> : null}
+  </nav>
+);
 class App extends React.Component {
-  componentDidMount() {
-    // console.log("cdm");
+  async componentDidMount() {
+    await authContainer._getTokenFromLocal();
   }
   render() {
     return (
-      <Provider>
+      <Provider inject={[authContainer]}>
         <Router>
           <AppStyles>
-            <nav>
-              <Link exact to="/">
-                Github Commit Browser
-              </Link>
-            </nav>
+            <Subscribe to={[Auth]}>
+              {auth => <Header token={auth.state.token} logout={auth.logout} />}
+            </Subscribe>
             <div className="content">
               <Routes />
             </div>

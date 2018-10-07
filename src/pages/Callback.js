@@ -1,7 +1,10 @@
 import React from "react";
 import { withSiteData, Redirect } from "react-static";
 import fetch from "isomorphic-unfetch";
+import { Subscribe } from "unstated";
+
 import { userStorage } from "../storage";
+import Auth from "../containers/auth";
 
 const getQueryVariable = (searchString, variable) => {
   const query = searchString.substring(1);
@@ -15,57 +18,37 @@ const getQueryVariable = (searchString, variable) => {
   console.log("Query variable %s not found", variable);
 };
 
-const decode = data => {
-  const vars = data.split("&");
-  let obj = {};
-  for (let v of vars) {
-    const [key, value] = v.split("=");
-    obj = { ...obj, [key]: value };
-  }
-  return obj;
-};
-
-const encode = data => {
-  return Object.keys(data)
-    .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
-    .join("&");
-};
-
 class CallbackPage extends React.Component {
   state = {
     token: "",
-    error: null
+    error: null,
+    redirect: false
   };
   async componentDidMount() {
     const {
       githubClientId: client_id,
       githubClientSecret: client_secret,
-      location: { search }
+      location: { search },
+      login
     } = this.props;
     const code = getQueryVariable(search, "code");
-    const query = encode({
-      client_id,
-      client_secret,
-      code
-    });
-    const response = await fetch(
-      `https://github-oauth-proxy.now.sh/?${query}`,
-      {
-        method: "POST"
-      }
-    );
-    const text = await response.text();
-    console.log({ text });
-    const { access_token: token = "", error = null } = decode(text);
-    console.log({
-      token,
-      error
-    });
-    if (token) {
-      userStorage.setItem("token", token);
+    try {
+      await login(
+        {
+          client_id,
+          client_secret,
+          code
+        },
+        this.redirect
+      );
+    } catch (error) {
+      console.error(error.message);
+      this.redirect(error);
     }
-    this.setState({ token, error });
   }
+  redirect = (error, token) => {
+    this.setState({ error, token, redirect: true });
+  };
   render() {
     const { token, error } = this.state;
     return (
@@ -78,4 +61,10 @@ class CallbackPage extends React.Component {
   }
 }
 
-export default withSiteData(CallbackPage);
+const Enhanced = withSiteData(CallbackPage);
+
+export default ({ location }) => (
+  <Subscribe to={[Auth]}>
+    {auth => <Enhanced location={location} login={auth.login} />}
+  </Subscribe>
+);

@@ -1,18 +1,23 @@
 import React from "react";
-import { withSiteData } from "react-static";
+import { Redirect } from "react-static";
+import { Subscribe } from "unstated";
 
-import WithUser from "../containers/user";
+import Auth from "../containers/auth";
 import Search from "../components/search";
 
-export default withSiteData(() => (
-  <WithUser
-    render={({ token }) => (
-      <React.Fragment>
-        <h1 style={{ textAlign: "center" }}>
-          Welcome to Github Commit Browser.
-        </h1>
-        <Search Authorization={`token ${token}`} />
-      </React.Fragment>
-    )}
-  />
-));
+export default () => (
+  <Subscribe to={[Auth]}>
+    {auth =>
+      auth.state.token ? (
+        <React.Fragment>
+          <h1 style={{ textAlign: "center" }}>
+            Welcome to Github Commit Browser.
+          </h1>
+          <Search Authorization={`token ${auth.state.token}`} />
+        </React.Fragment>
+      ) : (
+        <Redirect to="/login" />
+      )
+    }
+  </Subscribe>
+);
