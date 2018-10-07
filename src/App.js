@@ -6,6 +6,9 @@ import Routes from "react-static-routes";
 import { Provider } from "unstated";
 
 injectGlobal`
+  html, body {
+    min-height: 100vh;
+  }
   body {
     font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial,
       'Lucida Grande', sans-serif;
@@ -14,9 +17,18 @@ injectGlobal`
     margin: 0;
     padding: 0;
   }
+  #root {
+    flex: 1;
+    width: 100%;
+  }
+  body, #root {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const AppStyles = styled.div`
+  flex: 1;
   a {
     text-decoration: none;
     color: #108db8;
@@ -36,6 +48,9 @@ const AppStyles = styled.div`
 
   .content {
     padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   img {
@@ -54,7 +69,7 @@ class App extends React.Component {
           <AppStyles>
             <nav>
               <Link exact to="/">
-                Home
+                Github Commit Browser
               </Link>
             </nav>
             <div className="content">

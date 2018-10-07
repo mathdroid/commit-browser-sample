@@ -1,8 +1,7 @@
-import React from 'react'
-//
+import React, { Fragment } from "react";
 
 export default () => (
-  <div>
+  <Fragment>
     <h1>404 - Oh no's! We couldn't find that page :(</h1>
-  </div>
-)
+  </Fragment>
+);

@@ -10,13 +10,16 @@
     "serve": "serve dist -p 3000"
   },
   "dependencies": {
+    "debounce-fn": "^1.0.0",
     "dotenv": "^6.0.0",
+    "downshift": "^2.2.3",
     "emotion": "^9.2.4",
     "isomorphic-unfetch": "^3.0.0",
     "localforage": "^1.7.2",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-emotion": "^9.2.4",
+    "react-fast-compare": "^2.0.2",
     "react-router": "^4.2.0",
     "react-static": "^5.9.12",
     "react-universal-component": "^3.0.3",

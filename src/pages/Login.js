@@ -1,7 +1,7 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { withSiteData } from "react-static";
 
-import WithUser from "../components/with-user";
+import WithUser from "../containers/user";
 import Button from "../components/button";
 
 export default withSiteData(({ githubClientId }) => (
@@ -9,7 +9,7 @@ export default withSiteData(({ githubClientId }) => (
     redirectIfLoggedIn
     redirectTo="/"
     render={() => (
-      <div>
+      <Fragment>
         <h1 style={{ textAlign: "center" }}>Please Login</h1>
 
         <a
@@ -17,7 +17,7 @@ export default withSiteData(({ githubClientId }) => (
         >
           <Button>Connect to Github</Button>
         </a>
-      </div>
+      </Fragment>
     )}
   />
 ));
