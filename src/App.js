@@ -71,11 +71,16 @@ const Header = ({ token = "", logout = () => null }) => (
   </nav>
 );
 class App extends React.Component {
+  state = {
+    injected: false
+  };
   async componentDidMount() {
     await authContainer._getTokenFromLocal();
+    this.setState({ injected: true });
   }
   render() {
-    return (
+    const { injected } = this.state;
+    return injected ? (
       <Provider inject={[authContainer]}>
         <Router>
           <AppStyles>
@@ -88,7 +93,7 @@ class App extends React.Component {
           </AppStyles>
         </Router>
       </Provider>
-    );
+    ) : null;
   }
 }
 
