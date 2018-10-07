@@ -1,18 +1,7 @@
 import React, { Fragment } from "react";
 import { withSiteData } from "react-static";
 
-import { userStorage } from "../storage";
-import WithUser from "../containers/user";
 import Button from "../components/button";
-
-// class WithTokenFromStorage extends React.Component {
-//   state = {
-//     tokenFromStorage: ''
-//   }
-//   async componentDidMount() {
-//     const tokenFromStorage = await userStorage.getItem)
-//   }
-// }
 
 export default withSiteData(({ githubClientId }) => (
   <Fragment>

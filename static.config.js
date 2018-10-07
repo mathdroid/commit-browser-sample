@@ -12,6 +12,7 @@ if (!githubClientId || !githubClientSecret) {
 }
 
 export default {
+  siteRoot: "https://commit-browser.netlify.com",
   getSiteData: () => ({
     title: "Github Commit Browser",
     githubClientId,
