@@ -6,7 +6,7 @@
   "scripts": {
     "start": "react-static start",
     "stage": "react-static build --staging",
-    "build": "react-static build",
+    "build": "react-static build && workbox generateSW workbox-config.js",
     "serve": "serve dist -p 3000"
   },
   "dependencies": {
@@ -24,7 +24,8 @@
     "react-static": "^5.9.12",
     "react-universal-component": "^3.0.3",
     "unfetch": "^4.0.1",
-    "unstated": "^2.1.1"
+    "unstated": "^2.1.1",
+    "workbox-cli": "^3.6.2"
   },
   "devDependencies": {
     "babel-plugin-emotion": "^9.2.4",
