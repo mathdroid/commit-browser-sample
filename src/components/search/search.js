@@ -11,7 +11,7 @@ import {
   XIcon,
   css
 } from "./styles";
-import Fetch from "./fetch";
+import Fetch from "../fetch";
 import Commits from "./commits";
 import Card from "../repository-card";
 
@@ -22,7 +22,7 @@ class Search extends React.Component {
     const { Authorization } = this.props;
     return (
       <Downshift
-        itemToString={item => item.full_name}
+        itemToString={item => (item ? item.full_name : "")}
         defaultInputValue={"facebook/react"}
       >
         {({
@@ -118,7 +118,7 @@ class Search extends React.Component {
                                 selectedItem && selectedItem.id === item.id
                             })}
                           >
-                            {item.full_name}
+                            {item && item.full_name}
                           </Item>
                         ));
                       }}
@@ -128,11 +128,13 @@ class Search extends React.Component {
               </Menu>
               {selectedItem ? (
                 <Fragment>
+                  <h1>Repository</h1>
                   <Card
                     fullName={selectedItem.full_name}
                     externalLink={selectedItem.html_url}
                     updatedAt={selectedItem.updated_at}
                   />
+                  <h1>Commits</h1>
                   <Commits
                     Authorization={Authorization}
                     owner={selectedItem.full_name.split("/")[0]}

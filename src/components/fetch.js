@@ -2,6 +2,10 @@ import React from "react";
 import fetch from "isomorphic-unfetch";
 import debounce from "debounce-fn";
 import isEqual from "react-fast-compare";
+import { Subscribe } from "unstated";
+
+import db from "../storage";
+import Connection from "../containers/connection";
 
 const encode = data => {
   return data
@@ -34,18 +38,34 @@ class Fetch extends React.Component {
     }
   }
   undebounced = () => {
-    const { url, method = "get", params, data: body, headers } = this.props;
-    console.log({ params });
-    fetch(`${url}${params ? "?" : ""}${encode(params)}`, {
-      method,
-      body,
-      headers
+    const {
+      url,
+      method = "get",
+      params,
+      data: body,
+      headers,
+      offline
+    } = this.props;
+    const urlWithParam = `${url}${params ? "?" : ""}${encode(params)}`;
+    return new Promise(async resolve => {
+      if (offline) {
+        const { data, fetched } = await db.getItem(urlWithParam);
+        console.log(`Using data from ${fetched}`);
+        return resolve(data);
+      } else {
+        return fetch(urlWithParam, {
+          method,
+          body,
+          headers
+        })
+          .then(r => r.json())
+          .then(resolve);
+      }
     })
-      .then(r => r.json())
       .then(data => {
+        console.log({ offline }, data);
         if (this.mounted) {
-          console.log(data);
-          console.log(typeof data);
+          db.setItem(urlWithParam, { data, fetched: new Date() });
           this.setState({
             data,
             loading: false,
@@ -82,4 +102,8 @@ class Fetch extends React.Component {
   }
 }
 
-export default Fetch;
+export default props => (
+  <Subscribe to={[Connection]}>
+    {connection => <Fetch {...props} offline={!connection.state.online} />}
+  </Subscribe>
+);

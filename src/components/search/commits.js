@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 
-import Fetch from "./fetch";
+import Fetch from "../fetch";
 import { CardStyles } from "../repository-card";
 
 const getBaseEndpoint = ({ owner, repo }) =>

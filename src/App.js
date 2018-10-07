@@ -1,11 +1,13 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Router, Link, Route, Switch } from "react-static";
 import styled, { injectGlobal } from "react-emotion";
 import { hot } from "react-hot-loader";
 import Routes from "react-static-routes";
 import { Provider, Subscribe } from "unstated";
+import { Detector } from "react-detect-offline";
 
 import Auth from "./containers/auth";
+import Connection from "./containers/connection";
 
 let authContainer = new Auth();
 
@@ -83,21 +85,31 @@ class App extends React.Component {
     const { injected } = this.state;
     return injected ? (
       <Provider inject={[authContainer]}>
-        <Router>
-          <Switch>
-            <Route path="/repository" component={Repository} />
-            <AppStyles>
-              <Subscribe to={[Auth]}>
-                {auth => (
-                  <Header token={auth.state.token} logout={auth.logout} />
-                )}
-              </Subscribe>
-              <div className="content">
-                <Routes />
-              </div>
-            </AppStyles>
-          </Switch>
-        </Router>
+        <Subscribe to={[Connection]}>
+          {connection => (
+            <Fragment>
+              <Detector
+                render={() => null}
+                onChange={connection.setOnlineStatus}
+              />
+              <Router>
+                <Switch>
+                  <Route path="/repository" component={Repository} />
+                  <AppStyles>
+                    <Subscribe to={[Auth]}>
+                      {auth => (
+                        <Header token={auth.state.token} logout={auth.logout} />
+                      )}
+                    </Subscribe>
+                    <div className="content">
+                      <Routes />
+                    </div>
+                  </AppStyles>
+                </Switch>
+              </Router>
+            </Fragment>
+          )}
+        </Subscribe>
       </Provider>
     ) : null;
   }
