@@ -26,9 +26,9 @@ class Fetch extends React.Component {
       this.fetchData();
     }
   }
-
-  makeNetworkRequest = debounce(() => {
+  undebounced = () => {
     const { url, method = "get", params, data: body, headers } = this.props;
+    console.log({ params });
     fetch(`${url}?${encode(params)}`, {
       method,
       body,
@@ -46,7 +46,9 @@ class Fetch extends React.Component {
         this.setState({ data: undefined, error: e.message, loading: false });
         console.error(e);
       });
-  }, 300);
+  };
+
+  makeNetworkRequest = debounce(this.undebounced, { wait: 250 });
 
   fetchData = () => {
     this.setState({ error: false, loading: true });
