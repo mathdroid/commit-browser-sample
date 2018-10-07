@@ -20,13 +20,15 @@ export default ({ owner, repo, Authorization }) => (
       ) : (
         <Fragment>
           {data.map(c => (
-            <CardStyles key={c.sha}>
-              <div className="author">
-                <img src={c.author.avatar_url} />
-                <h2>{c.author.login}</h2>
-              </div>
-              <p>{c.commit.message}</p>
-            </CardStyles>
+            <a href={c.url} key={c.sha}>
+              <CardStyles>
+                <div className="author">
+                  <img src={c.author.avatar_url} />
+                  <h2>{c.author.login}</h2>
+                </div>
+                <p>{c.commit.message}</p>
+              </CardStyles>
+            </a>
           ))}
         </Fragment>
       )

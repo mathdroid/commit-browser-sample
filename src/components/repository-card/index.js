@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "react-emotion";
 
-const onAttention = "&:hover, &:focus";
 export const CardStyles = styled.div`
   margin: 2rem 0;
   padding: 1rem;
@@ -16,7 +15,7 @@ export const CardStyles = styled.div`
       vertical-align: center;
     }
   }
-  ${onAttention}: {
+  &:hover, &:focus: {
       borderColor: "#96c8da",
       boxShadow: "0 2px 3px 0 rgba(34,36,38,.15)"
     }
