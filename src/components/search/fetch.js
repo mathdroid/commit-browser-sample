@@ -4,9 +4,13 @@ import debounce from "debounce-fn";
 import isEqual from "react-fast-compare";
 
 const encode = data => {
-  return Object.keys(data)
-    .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
-    .join("&");
+  return data
+    ? Object.keys(data)
+        .map(
+          key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key])
+        )
+        .join("&")
+    : "";
 };
 
 class Fetch extends React.Component {
@@ -32,7 +36,7 @@ class Fetch extends React.Component {
   undebounced = () => {
     const { url, method = "get", params, data: body, headers } = this.props;
     console.log({ params });
-    fetch(`${url}?${encode(params)}`, {
+    fetch(`${url}${params ? "?" : ""}${encode(params)}`, {
       method,
       body,
       headers
@@ -40,6 +44,8 @@ class Fetch extends React.Component {
       .then(r => r.json())
       .then(data => {
         if (this.mounted) {
+          console.log(data);
+          console.log(typeof data);
           this.setState({
             data,
             loading: false,

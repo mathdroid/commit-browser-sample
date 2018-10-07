@@ -1,5 +1,5 @@
 import React from "react";
-import { Router, Link } from "react-static";
+import { Router, Link, Route, Switch } from "react-static";
 import styled, { injectGlobal } from "react-emotion";
 import { hot } from "react-hot-loader";
 import Routes from "react-static-routes";
@@ -70,6 +70,7 @@ const Header = ({ token = "", logout = () => null }) => (
     {token ? <button onClick={logout}>Log Out</button> : null}
   </nav>
 );
+const Repository = () => <div>dynamic!</div>;
 class App extends React.Component {
   state = {
     injected: false
@@ -83,14 +84,19 @@ class App extends React.Component {
     return injected ? (
       <Provider inject={[authContainer]}>
         <Router>
-          <AppStyles>
-            <Subscribe to={[Auth]}>
-              {auth => <Header token={auth.state.token} logout={auth.logout} />}
-            </Subscribe>
-            <div className="content">
-              <Routes />
-            </div>
-          </AppStyles>
+          <Switch>
+            <Route path="/repository" component={Repository} />
+            <AppStyles>
+              <Subscribe to={[Auth]}>
+                {auth => (
+                  <Header token={auth.state.token} logout={auth.logout} />
+                )}
+              </Subscribe>
+              <div className="content">
+                <Routes />
+              </div>
+            </AppStyles>
+          </Switch>
         </Router>
       </Provider>
     ) : null;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import Downshift from "downshift";
 
 import {
@@ -12,6 +12,7 @@ import {
   css
 } from "./styles";
 import Fetch from "./fetch";
+import Commits from "./commits";
 import Card from "../repository-card";
 
 const baseEndpoint = "https://api.github.com/search/repositories";
@@ -126,11 +127,18 @@ class Search extends React.Component {
                 })()}
               </Menu>
               {selectedItem ? (
-                <Card
-                  fullName={selectedItem.full_name}
-                  externalLink={selectedItem.html_url}
-                  updatedAt={selectedItem.updated_at}
-                />
+                <Fragment>
+                  <Card
+                    fullName={selectedItem.full_name}
+                    externalLink={selectedItem.html_url}
+                    updatedAt={selectedItem.updated_at}
+                  />
+                  <Commits
+                    Authorization={Authorization}
+                    owner={selectedItem.full_name.split("/")[0]}
+                    repo={selectedItem.full_name.split("/")[1]}
+                  />
+                </Fragment>
               ) : null}
             </div>
           );
